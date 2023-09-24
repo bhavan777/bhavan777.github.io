@@ -1,0 +1,34 @@
+{
+  "id": "root",
+  "title": "Root Node",
+  "description": "Contrary to popular belief",
+  "children": [
+    {
+      "id": 2,
+      "title": "Node A",
+      "description": "Lorem Ipsum is not simply random text",
+      "children": [
+        {
+          "id": 3,
+          "title": "Node A-1",
+          "description": "It has roots in a piece of classical Latin literature from 45 BC",
+          "children": [
+            {
+              "id": 4,
+              "title": "Node A-2",
+              "description": "making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia",
+              "children": [
+                {
+                  "id": 5,
+                  "title": "Node A-3",
+                  "description": "looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

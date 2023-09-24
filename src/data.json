@@ -1,0 +1,114 @@
+{
+  "id": "root",
+  "title": "frontend",
+  "description": "frontend is awesome",
+  "children": [
+    {
+      "id": "layouting",
+      "title": "layouting",
+      "description": "layouting is very important in frontend",
+      "children": [
+        {
+          "id": "html",
+          "title": "html",
+          "description": "HyperTextMarkupLanguange in short is HTML which can perform layouting",
+          "children": []
+        },
+        {
+          "id": "html5",
+          "title": "html5",
+          "description": "html5 is the latest version of html",
+          "children": []
+        },
+        {
+          "id": "jsx",
+          "title": "JSX",
+          "description": "JSX is the html equivalent in react ecosystem",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "styling",
+      "title": "styling",
+      "description": "styling is very important yet underrated in frontend",
+      "children": [
+        {
+          "id": "css",
+          "title": "css",
+          "description": "cascading stylessheets in short is css and used to apply style information of the layout html tags",
+          "children": []
+        },
+        {
+          "id": "scss",
+          "title": "scss|sass",
+          "description": "sassy css is scss|sass with additional powers",
+          "children": []
+        },
+        {
+          "id": "sc",
+          "title": "styled components",
+          "description": "styled componenets is one of libraries to dynamically generate css in the browser",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "interactivity",
+      "title": "interactivity",
+      "description": "we need Javascript to provide interactivity to our web pages",
+      "children": [
+        {
+          "id": "vanilla",
+          "title": "vanilla javascript",
+          "description": "the plain old version of javascript is sometimes refered to as vanilla jaascript",
+          "children": []
+        },
+        {
+          "id": "jquery",
+          "title": "jquery",
+          "description": "jquery made our lives easier by providing predictable abstraction for dom manipulations with javascript",
+          "children": []
+        },
+        {
+          "id": "react",
+          "title": "react",
+          "description": "react is a UI library focused on performance in page rendering",
+          "children": [
+            {
+              "id": "react-router",
+              "title": "react router",
+              "description": "the popular library used to handle the routing in react ecosystem",
+              "children": []
+            },
+            {
+              "id": "redux",
+              "title": "redux",
+              "description": "the most popular state management library for react ecosystem",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "visualisation",
+      "title": "Visualisations",
+      "description": "data visualizations are very important elements to communicate large data in effective way",
+      "children": [
+        {
+          "id": "d3",
+          "title": "d3js",
+          "description": "data driven documents is D3 in short",
+          "children": []
+        },
+        {
+          "id": "highcharts",
+          "title": "highcharts",
+          "description": "a very popular framework built on top of highcharts",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
