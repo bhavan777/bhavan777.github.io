@@ -13,6 +13,7 @@ const Tree = ({ treeData, activeWord, setWords }) => {
   const ToolTipRef = useRef(null);
   const data = hierarchy(treeData);
 
+
   const createWordsToIdsMap = useCallback(
     (descendants = data.descendants()) => {
       const tempMap = {};
@@ -60,7 +61,7 @@ const Tree = ({ treeData, activeWord, setWords }) => {
   };
 
   // Initialise svg base for rendering tree
-  const initTree = useCallback(() => {
+  const initTree = () => {
     const svg = select(svgRef.current);
     svg
       .attr("width", svgRef.current.parentNode.clientWidth)
@@ -73,7 +74,7 @@ const Tree = ({ treeData, activeWord, setWords }) => {
       .append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
-  }, []);
+  };
 
   //  Handle node click
   //  Open node if closed , close if already open
@@ -258,7 +259,8 @@ const Tree = ({ treeData, activeWord, setWords }) => {
             .remove()
       )
       .on("click", toggleNodeExpansion);
-  }, [visibleNodes, data, highlightNodes, openNodes, toggleNodeExpansion]);
+    // eslint-disable-next-line
+  }, [visibleNodes, data]);
 
   useEffect(() => {
     initTree();
@@ -268,46 +270,47 @@ const Tree = ({ treeData, activeWord, setWords }) => {
     // and callback the word cloud data to be used in the parent
     const wordsData = createWordsToIdsMap(hierarchy(treeData).descendants());
 
+    debugger;
     // we will set this state on mount for current state of
     // words and corresponding nodes they are part of
     // to highlight if some word is clicked
     setWords(wordsData);
+    // eslint-disable-next-line
   }, [treeData]);
 
   useEffect(() => {
     renderNodes();
-  }, [visibleNodes, treeData, renderNodes]);
+    // eslint-disable-next-line
+  }, [visibleNodes, treeData]);
 
-  const expandActiveWordNodes = useCallback(
-    (word) => {
-      // 1. get nodes which has the word in its description and
-      // store its ids in highlights state to highlight while rendering
-      const idsToExpand = wordToIdMap[word];
-      const nodesToExpand = data
-        .descendants()
-        .filter((node) => idsToExpand.includes(node.data.id));
-      setHighlightNodes(idsToExpand);
+  const expandActiveWordNodes = (word) => {
+    // 1. get nodes which has the word in its description and
+    // store its ids in highlights state to highlight while rendering
+    const idsToExpand = wordToIdMap[word];
+    const nodesToExpand = data
+      .descendants()
+      .filter((node) => idsToExpand.includes(node.data.id));
+    setHighlightNodes(idsToExpand);
 
-      // 2. find all path node id from these
-      // nodes to root to open all the paths
-      const pathNodes = nodesToExpand.map((node) => node.path(data)).flat();
-      const nodesToUpdate = pathNodes
-        .map((node) => node.parent?.children.map((ch) => ch.data.id) ?? "root")
-        .flat();
+    // 2. find all path node id from these
+    // nodes to root to open all the paths
+    const pathNodes = nodesToExpand.map((node) => node.path(data)).flat();
+    const nodesToUpdate = pathNodes
+      .map((node) => node.parent?.children.map((ch) => ch.data.id) ?? "root")
+      .flat();
 
-      // 3. store all nodes which has children that are opening
-      // and mark them as opened
-      const allPathNodesWithChildrenIds = pathNodes
-        .filter((node) => node.data.children.length)
-        .map((node) => node.data.id);
-      setOpenNodes(allPathNodesWithChildrenIds);
+    // 3. mark all nodes which has children that are opening
+    const leafPathNodes = nodesToExpand.map((n) => n.data.id);
+    const allPathNodesWithChildrenIds = pathNodes
+      .filter((node) => node.data.children.length)
+      .filter((node) => !leafPathNodes.includes(node.data.id))
+      .map((node) => node.data.id);
+    setOpenNodes(allPathNodesWithChildrenIds);
 
-      // 4. update all unique ids to be marked visible
-      const updatedVisibleNodes = [...new Set([...nodesToUpdate])];
-      setVisibleNodes(updatedVisibleNodes);
-    },
-    [data, wordToIdMap]
-  );
+    // 4. update all unique ids to be marked visible
+    const updatedVisibleNodes = [...new Set([...nodesToUpdate])];
+    setVisibleNodes(updatedVisibleNodes);
+  };
 
   useEffect(() => {
     if (activeWord) {
@@ -315,7 +318,8 @@ const Tree = ({ treeData, activeWord, setWords }) => {
       // active word state is updated and this method to expand tree is called
       expandActiveWordNodes(activeWord);
     }
-  }, [activeWord, expandActiveWordNodes]);
+    // eslint-disable-next-line
+  }, [activeWord]);
 
   return <svg ref={svgRef}></svg>;
 };
