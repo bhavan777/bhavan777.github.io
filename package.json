@@ -1,7 +1,5 @@
 {
   "name": "wordcloud-tree",
-  "homepage": "https://bhavan777.github.io/wordcloudtree/",
-  "start_page": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -272,7 +272,7 @@ const Tree = ({ treeData, activeWord, setWords }) => {
     // words and corresponding nodes they are part of
     // to highlight if some word is clicked
     setWords(wordsData);
-  }, [treeData, createWordsToIdsMap, initTree, setWords]);
+  }, [treeData]);
 
   useEffect(() => {
     renderNodes();
