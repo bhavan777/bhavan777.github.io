@@ -9,26 +9,6 @@
 .node {
   cursor: pointer;
 }
-/*
-.align-center {
-  text-align: center;
-}
-
-
-
-.wordcloud,.tree {
-  height: 100vh;
-}
-
-
-.text-capitalize {
-  text-transform: capitalize;
-}
-
-.highlight-node {
-  box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
-} */
-
 
 svg {
   background-color: antiquewhite;

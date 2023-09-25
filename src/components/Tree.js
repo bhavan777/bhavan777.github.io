@@ -1,4 +1,4 @@
-import { select, hierarchy, schemeDark2, tree } from "d3";
+import { select, hierarchy, schemeDark2 } from "d3";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import stopWordsArray from "../stopWords";
 
@@ -13,6 +13,43 @@ const Tree = ({ treeData, activeWord, setWords }) => {
   const ToolTipRef = useRef(null);
   const data = hierarchy(treeData);
 
+  const createWordsToIdsMap = useCallback(
+    (descendants = data.descendants()) => {
+      const tempMap = {};
+      const stopWords = new Set([...stopWordsArray]);
+
+      // This is not optimized way, but here,
+      // we are preparing a map of all words
+      // from all nodes excluding any from stop words
+      // to the corresponding node id that cotains the word
+
+      descendants.forEach((node) =>
+        node.data.description.split(" ").forEach((w) => {
+          if (stopWords.has(w)) {
+            return;
+          }
+          if (tempMap[w]) {
+            tempMap[w].push(node.data.id);
+          } else {
+            tempMap[w] = [node.data.id];
+          }
+        })
+      );
+      setWordToIdMap(tempMap);
+      // returning same map in this format to use to render word cloud
+      // Array<{
+      //   text: string (word)
+      //   value: number (occurances)
+      // }>
+      const wordCloudData = Object.entries(tempMap).map(([text, keys]) => ({
+        text,
+        value: keys.length,
+      }));
+      return wordCloudData;
+    },
+    [data]
+  );
+
   const resetState = () => {
     ctrRef.current?.selectAll("rect").remove();
     ctrRef.current?.selectAll("text").remove();
@@ -23,7 +60,7 @@ const Tree = ({ treeData, activeWord, setWords }) => {
   };
 
   // Initialise svg base for rendering tree
-  const initTree = () => {
+  const initTree = useCallback(() => {
     const svg = select(svgRef.current);
     svg
       .attr("width", svgRef.current.parentNode.clientWidth)
@@ -36,7 +73,7 @@ const Tree = ({ treeData, activeWord, setWords }) => {
       .append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
-  };
+  }, []);
 
   //  Handle node click
   //  Open node if closed , close if already open
@@ -82,7 +119,14 @@ const Tree = ({ treeData, activeWord, setWords }) => {
         }
       }
     },
-    [openNodes, visibleNodes, data]
+    [
+      openNodes,
+      visibleNodes,
+      data,
+      activeWordCloudId,
+      createWordsToIdsMap,
+      setWords,
+    ]
   );
 
   const renderNodes = useCallback(() => {
@@ -214,41 +258,7 @@ const Tree = ({ treeData, activeWord, setWords }) => {
             .remove()
       )
       .on("click", toggleNodeExpansion);
-  }, [visibleNodes, data]);
-
-  const createWordsToIdsMap = (descendants = data.descendants()) => {
-    const tempMap = {};
-    const stopWords = new Set([...stopWordsArray]);
-
-    // This is not optimized way, but here,
-    // we are preparing a map of all words
-    // from all nodes excluding any from stop words
-    // to the corresponding node id that cotains the word
-
-    descendants.forEach((node) =>
-      node.data.description.split(" ").forEach((w) => {
-        if (stopWords.has(w)) {
-          return;
-        }
-        if (tempMap[w]) {
-          tempMap[w].push(node.data.id);
-        } else {
-          tempMap[w] = [node.data.id];
-        }
-      })
-    );
-    setWordToIdMap(tempMap);
-    // returning same map in this format to use to render word cloud
-    // Array<{
-    //   text: string (word)
-    //   value: number (occurances)
-    // }>
-    const wordCloudData = Object.entries(tempMap).map(([text, keys]) => ({
-      text,
-      value: keys.length,
-    }));
-    return wordCloudData;
-  };
+  }, [visibleNodes, data, highlightNodes, openNodes, toggleNodeExpansion]);
 
   useEffect(() => {
     initTree();
@@ -262,39 +272,42 @@ const Tree = ({ treeData, activeWord, setWords }) => {
     // words and corresponding nodes they are part of
     // to highlight if some word is clicked
     setWords(wordsData);
-  }, [treeData]);
+  }, [treeData, createWordsToIdsMap, initTree, setWords]);
 
   useEffect(() => {
     renderNodes();
-  }, [visibleNodes, treeData]);
+  }, [visibleNodes, treeData, renderNodes]);
 
-  const expandActiveWordNodes = (word) => {
-    // 1. get nodes which has the word in its description and
-    // store its ids in highlights state to highlight while rendering
-    const idsToExpand = wordToIdMap[word];
-    const nodesToExpand = data
-      .descendants()
-      .filter((node) => idsToExpand.includes(node.data.id));
-    setHighlightNodes(idsToExpand);
+  const expandActiveWordNodes = useCallback(
+    (word) => {
+      // 1. get nodes which has the word in its description and
+      // store its ids in highlights state to highlight while rendering
+      const idsToExpand = wordToIdMap[word];
+      const nodesToExpand = data
+        .descendants()
+        .filter((node) => idsToExpand.includes(node.data.id));
+      setHighlightNodes(idsToExpand);
 
-    // 2. find all path node id from these
-    // nodes to root to open all the paths
-    const pathNodes = nodesToExpand.map((node) => node.path(data)).flat();
-    const nodesToUpdate = pathNodes
-      .map((node) => node.parent?.children.map((ch) => ch.data.id) ?? "root")
-      .flat();
+      // 2. find all path node id from these
+      // nodes to root to open all the paths
+      const pathNodes = nodesToExpand.map((node) => node.path(data)).flat();
+      const nodesToUpdate = pathNodes
+        .map((node) => node.parent?.children.map((ch) => ch.data.id) ?? "root")
+        .flat();
 
-    // 3. store all nodes which has children that are opening
-    // and mark them as opened
-    const allPathNodesWithChildrenIds = pathNodes
-      .filter((node) => node.data.children.length)
-      .map((node) => node.data.id);
-    setOpenNodes(allPathNodesWithChildrenIds);
+      // 3. store all nodes which has children that are opening
+      // and mark them as opened
+      const allPathNodesWithChildrenIds = pathNodes
+        .filter((node) => node.data.children.length)
+        .map((node) => node.data.id);
+      setOpenNodes(allPathNodesWithChildrenIds);
 
-    // 4. update all unique ids to be marked visible
-    const updatedVisibleNodes = [...new Set([...nodesToUpdate])];
-    setVisibleNodes(updatedVisibleNodes);
-  };
+      // 4. update all unique ids to be marked visible
+      const updatedVisibleNodes = [...new Set([...nodesToUpdate])];
+      setVisibleNodes(updatedVisibleNodes);
+    },
+    [data, wordToIdMap]
+  );
 
   useEffect(() => {
     if (activeWord) {
@@ -302,7 +315,7 @@ const Tree = ({ treeData, activeWord, setWords }) => {
       // active word state is updated and this method to expand tree is called
       expandActiveWordNodes(activeWord);
     }
-  }, [activeWord]);
+  }, [activeWord, expandActiveWordNodes]);
 
   return <svg ref={svgRef}></svg>;
 };
