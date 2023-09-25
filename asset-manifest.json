@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/wordcloudtree/static/css/main.05314a43.css",
-    "main.js": "/wordcloudtree/static/js/main.d21f5601.js",
+    "main.js": "/wordcloudtree/static/js/main.8d7aaff4.js",
     "static/js/787.3f2bac76.chunk.js": "/wordcloudtree/static/js/787.3f2bac76.chunk.js",
     "index.html": "/wordcloudtree/index.html",
     "main.05314a43.css.map": "/wordcloudtree/static/css/main.05314a43.css.map",
-    "main.d21f5601.js.map": "/wordcloudtree/static/js/main.d21f5601.js.map",
+    "main.8d7aaff4.js.map": "/wordcloudtree/static/js/main.8d7aaff4.js.map",
     "787.3f2bac76.chunk.js.map": "/wordcloudtree/static/js/787.3f2bac76.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.05314a43.css",
-    "static/js/main.d21f5601.js"
+    "static/js/main.8d7aaff4.js"
   ]
 }
