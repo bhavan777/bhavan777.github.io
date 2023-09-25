@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.05314a43.css",
-    "main.js": "/static/js/main.2f40cc16.js",
-    "static/js/787.3f2bac76.chunk.js": "/static/js/787.3f2bac76.chunk.js",
-    "index.html": "/index.html",
-    "main.05314a43.css.map": "/static/css/main.05314a43.css.map",
-    "main.2f40cc16.js.map": "/static/js/main.2f40cc16.js.map",
-    "787.3f2bac76.chunk.js.map": "/static/js/787.3f2bac76.chunk.js.map"
+    "main.css": "/wordcloudtree/static/css/main.05314a43.css",
+    "main.js": "/wordcloudtree/static/js/main.d21f5601.js",
+    "static/js/787.3f2bac76.chunk.js": "/wordcloudtree/static/js/787.3f2bac76.chunk.js",
+    "index.html": "/wordcloudtree/index.html",
+    "main.05314a43.css.map": "/wordcloudtree/static/css/main.05314a43.css.map",
+    "main.d21f5601.js.map": "/wordcloudtree/static/js/main.d21f5601.js.map",
+    "787.3f2bac76.chunk.js.map": "/wordcloudtree/static/js/787.3f2bac76.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.05314a43.css",
-    "static/js/main.2f40cc16.js"
+    "static/js/main.d21f5601.js"
   ]
 }
